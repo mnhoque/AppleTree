@@ -1,0 +1,127 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AppleTree2
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            List<Combination> lstCombination = new List<Combination>();
+            int SuperMax;
+            int[] A = { 6, 1, 4, 6, 3, 4, 7, 4 };
+            int x = 6;
+            for (x = 0; x <= 5; x++)
+            {
+                int y = x + 2;
+                Combination combination = new Combination();
+                Triplet triplet = new Triplet();
+                triplet.A = A[x];
+                triplet.B = A[x + 1];
+                triplet.C = A[x + 2];
+
+                combination.triplet = triplet;
+                
+
+                combination.listPair = new List<Pair>();//empty
+
+                for (int i = 0; i < x - 1; i++)
+                {// Console.WriteLine(A[i] + " " + A[i + 1]);
+                    Pair pair = new Pair();
+                    pair.X = A[i];
+                    pair.Y = A[i + 1];
+                    combination.listPair.Add(pair);
+
+                }
+                for (int i = y + 1; i <= A.Length - 2; i++)
+                {
+                    //Console.WriteLine(A[i] + " " + A[i + 1]);
+
+                    Pair pair = new Pair();
+                    pair.X = A[i];
+                    pair.Y = A[i + 1];
+
+                    combination.listPair.Add(pair);
+
+                }
+                //printing the combination object
+                //Console.WriteLine(combination.triplet.A + ", " + combination.triplet.B + ", " + combination.triplet.C);
+                foreach (Pair pair in combination.listPair)
+                {
+                  //  Console.WriteLine(pair.X + ", " + pair.Y);
+                }
+                // Console.WriteLine("Highest value: " + combination.HighestValue());
+                // Console.WriteLine("Younger brother's choice " + combination.pairMax.X + ", " + combination.pairMax.Y);
+                lstCombination.Add(combination);
+            }
+
+            SuperMax = 0;
+            Combination SaveCombination = null;
+
+            for(int i = 0; i <= lstCombination.Count - 1; i++)
+            {
+                if (lstCombination[i].HighestValue() > SuperMax)
+                {
+                    SuperMax = lstCombination[i].HighestValue();
+                    SaveCombination = lstCombination[i];
+
+                }
+                   
+
+            }
+            Console.WriteLine("Super Highest Value is " + SuperMax + ",\nOlder brother will choose: " + SaveCombination.triplet.A + "," + SaveCombination.triplet.B + "," + SaveCombination.triplet.C + ", Younger brother will choose: " + SaveCombination.pairMax.X + "," + SaveCombination.pairMax.Y);
+
+            Console.ReadLine();
+
+        }
+
+
+    }
+
+
+    class Triplet
+    {
+        public int A;
+        public int B;
+        public int C;
+
+    }
+
+    class Pair
+    {
+        public int X;
+        public int Y;
+    }
+
+
+    class Combination
+    {
+        public Triplet triplet;
+        public List<Pair> listPair;//All the possible pair choice combination for the younger brother
+
+        public Pair pairMax = null;//Which pair is the best pair choice
+
+        public int HighestValue()
+        {
+            int max = 0;
+            pairMax = listPair[0];
+           
+
+            foreach (Pair pair in listPair)
+            {
+                if(pair.X + pair.Y > max)
+                {
+                    max = pair.X + pair.Y;
+                    pairMax = pair;
+                }
+            }
+
+            return max  + triplet.A + triplet.B + triplet.C;
+        }
+    }
+
+
+}
